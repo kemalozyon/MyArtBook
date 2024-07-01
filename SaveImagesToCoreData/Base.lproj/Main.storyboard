@@ -102,6 +102,7 @@
                     <navigationItem key="navigationItem" id="qCz-85-gMI"/>
                     <connections>
                         <outlet property="artistField" destination="9fF-U4-uU9" id="pRk-Yx-UG7"/>
+                        <outlet property="buttonProperty" destination="d5O-gN-VL1" id="1FU-OG-QQB"/>
                         <outlet property="imageView" destination="0ZS-s7-CgB" id="mcY-Ua-nWR"/>
                         <outlet property="namefield" destination="zqg-6h-U2C" id="Cnb-q5-9gx"/>
                         <outlet property="yearField" destination="Ryr-9c-3BA" id="E20-Qb-i8e"/>
