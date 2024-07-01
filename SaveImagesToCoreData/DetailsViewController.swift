@@ -15,12 +15,12 @@ class DetailsViewController: UIViewController, UINavigationControllerDelegate, U
     @IBOutlet weak var artistField: UITextField!
     @IBOutlet weak var yearField: UITextField!
     @IBOutlet weak var buttonProperty: UIButton!
-    
+    @IBOutlet weak var approvedImage: UIImageView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        approvedImage.isHidden = true
         buttonProperty.isEnabled = false
         //Use imageView as button in order to add photos from library or camera to your imageview.
         imageView.isUserInteractionEnabled = true
@@ -69,15 +69,28 @@ class DetailsViewController: UIViewController, UINavigationControllerDelegate, U
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let context  = appDelegate.persistentContainer.viewContext
             
-            let newPainting = NSEntityDescription.insertNewObject(forEntityName: "Paintings", into: context)
+            let newPainting = NSEntityDescription.insertNewObject(forEntityName: "Pictures", into: context)
             
             //Adding objects to DataBase
             newPainting.setValue(namefield.text!, forKey: "name")
             newPainting.setValue(artistField.text!, forKey: "artist")
             newPainting.setValue(UUID(), forKey: "id")
             let myPaint = imageView.image!.jpegData(compressionQuality: 0.5)
-            newPainting.setValue(myPaint, forKey: "image")
+            newPainting.setValue(myPaint, forKey: "picture")
             newPainting.setValue(year, forKey: "year")
+            
+            do{
+                try context.save()
+                let alert = UIAlertController(title: "Succeed", message: "Picture has been successfully saved!", preferredStyle: UIAlertController.Style.alert)
+                let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { UIAlertAction in
+                    self.buttonProperty.isHidden=true
+                    self.approvedImage.isHidden = false
+                }
+                alert.addAction(okButton)
+                present(alert,animated: true)
+            }catch{
+                
+            }
         }else{
             let alert = UIAlertController(title: "Error", message: "Please enter a number for the blank of age!", preferredStyle: UIAlertController.Style.alert)
             let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.destructive, handler: nil)
