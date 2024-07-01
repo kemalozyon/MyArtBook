@@ -14,6 +14,7 @@
 		3F51F19E2C32742F00A6E527 /* SaveImagesToCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 3F51F19C2C32742F00A6E527 /* SaveImagesToCoreData.xcdatamodeld */; };
 		3F51F1A02C32743100A6E527 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3F51F19F2C32743100A6E527 /* Assets.xcassets */; };
 		3F51F1A32C32743100A6E527 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = 3F51F1A22C32743100A6E527 /* Base */; };
+		3F51F1AB2C32758D00A6E527 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F51F1AA2C32758D00A6E527 /* DetailsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		3F51F19F2C32743100A6E527 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3F51F1A22C32743100A6E527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3F51F1A42C32743100A6E527 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3F51F1AA2C32758D00A6E527 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +62,7 @@
 			children = (
 				3F51F1932C32742F00A6E527 /* AppDelegate.swift */,
 				3F51F1952C32742F00A6E527 /* SceneDelegate.swift */,
+				3F51F1AA2C32758D00A6E527 /* DetailsViewController.swift */,
 				3F51F1972C32742F00A6E527 /* ViewController.swift */,
 				3F51F1992C32742F00A6E527 /* Main.storyboard */,
 				3F51F19F2C32743100A6E527 /* Assets.xcassets */,
@@ -145,6 +148,7 @@
 				3F51F1982C32742F00A6E527 /* ViewController.swift in Sources */,
 				3F51F1942C32742F00A6E527 /* AppDelegate.swift in Sources */,
 				3F51F1962C32742F00A6E527 /* SceneDelegate.swift in Sources */,
+				3F51F1AB2C32758D00A6E527 /* DetailsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
