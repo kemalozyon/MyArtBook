@@ -16,19 +16,59 @@ class DetailsViewController: UIViewController, UINavigationControllerDelegate, U
     @IBOutlet weak var yearField: UITextField!
     @IBOutlet weak var buttonProperty: UIButton!
     @IBOutlet weak var approvedImage: UIImageView!
-    
+    var chosenImage = ""
+    var chosenID : UUID?
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        approvedImage.isHidden = true
-        buttonProperty.isEnabled = false
-        //Use imageView as button in order to add photos from library or camera to your imageview.
-        imageView.isUserInteractionEnabled = true
-        let imageGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(addImage))
-        imageView.addGestureRecognizer(imageGestureRecognizer)
-        //This code to close keyboard when u click on view so that u can reach the save button
-        let viewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        view.addGestureRecognizer(viewGestureRecognizer)
+        if chosenImage != ""{
+            //Core Data
+            buttonProperty.isHidden = true
+            artistField.isEnabled = false
+            namefield.isEnabled = false
+            yearField.isEnabled = false
+            imageView.isUserInteractionEnabled = false
+            let idString = chosenID?.uuidString
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            let context = appDelegate.persistentContainer.viewContext
+            
+            let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pictures")
+            fetchRequest.returnsObjectsAsFaults = false
+            fetchRequest.predicate = NSPredicate(format: "id = %@", idString!)
+            do{
+                let results = try context.fetch(fetchRequest)
+                if results.count > 0{
+                    for result in results as! [NSManagedObject]{
+                        if let name = result.value(forKey: "name") as? String{
+                            namefield.text = name
+                        }
+                        if let artist = result.value(forKey: "artist") as? String{
+                            artistField.text = artist
+                        }
+                        if let year = result.value(forKey: "year") as? Int32{
+                            yearField.text = String(year)
+                        }
+                        if let image = result.value(forKey: "picture") as? Data{
+                            imageView.image = UIImage(data: image)
+                        }
+                    }
+                }
+            }catch{
+                
+            }
+            
+        }else{
+            approvedImage.isHidden = true
+            buttonProperty.isEnabled = false
+            //Use imageView as button in order to add photos from library or camera to your imageview.
+            imageView.isUserInteractionEnabled = true
+            let imageGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(addImage))
+            imageView.addGestureRecognizer(imageGestureRecognizer)
+            //This code to close keyboard when u click on view so that u can reach the save button
+            let viewGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+            view.addGestureRecognizer(viewGestureRecognizer)
+        }
+        
         
     }
     
@@ -85,6 +125,8 @@ class DetailsViewController: UIViewController, UINavigationControllerDelegate, U
                 let okButton = UIAlertAction(title: "OK", style: UIAlertAction.Style.default) { UIAlertAction in
                     self.buttonProperty.isHidden=true
                     self.approvedImage.isHidden = false
+                    NotificationCenter.default.post(name: NSNotification.Name("newData"), object: nil)
+                    self.navigationController?.popViewController(animated: true)
                 }
                 alert.addAction(okButton)
                 present(alert,animated: true)

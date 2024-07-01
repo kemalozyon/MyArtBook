@@ -6,31 +6,82 @@
 //
 
 import UIKit
+import CoreData
 
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     
 
     @IBOutlet weak var tableView: UITableView!
+    var myName = [String]()
+    var myId = [UUID] ()
+    var selectedImage = ""
+    var id = UUID()
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
         navigationController?.navigationBar.topItem?.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.add, target: self, action: #selector(goToDetailsVC))
+        getItems()
+        
     }
     @objc func goToDetailsVC(){
+        selectedImage = ""
         performSegue(withIdentifier: "goToDetails", sender: nil)
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return myName.count
+    }
+    @objc func getItems(){
+        myName.removeAll(keepingCapacity: false)
+        myId.removeAll(keepingCapacity: false)
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let context = appDelegate.persistentContainer.viewContext
+        
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "Pictures")
+        fetchRequest.returnsObjectsAsFaults = false
+        do{
+            let results = try context.fetch(fetchRequest)
+            for result in results as! [NSManagedObject]{
+                if let name = result.value(forKey: "name") as? String{
+                    self.myName.append(name)
+                }
+                if let id = result.value(forKey: "id") as? UUID{
+                    self.myId.append(id)
+                }
+            }
+        }catch{
+            print("An Error was occored while trying to fetch.")
+        }
+        
+        self.tableView.reloadData()
+        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
         var context = cell.defaultContentConfiguration()
-        context.text = "kemal"
+        context.text = myName[indexPath.row]
         cell.contentConfiguration = context
         return cell
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        NotificationCenter.default.addObserver(self, selector: #selector(getItems), name: Notification.Name(rawValue: "newData"), object: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        selectedImage = myName[indexPath.row]
+        id = myId[indexPath.row]
+        performSegue(withIdentifier: "goToDetails", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToDetails"{
+            let destinationVC = segue.destination as! DetailsViewController
+            destinationVC.chosenImage = selectedImage
+            destinationVC.chosenID = id
+        }
     }
 }
 
